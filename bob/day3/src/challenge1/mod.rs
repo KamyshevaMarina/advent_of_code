@@ -29,7 +29,7 @@ fn parse(data: &str) -> Vec<Patch> {
     patches
 }
 
-fn main() {
+fn walk() {
     let mut count = 0;
     let mut f = File::open("data.txt").expect("filesystem error");
     let mut s: String = String::new();
