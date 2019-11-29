@@ -11,6 +11,7 @@ pub mod utils {
     }
 
     impl Patch {
+        #[inline(always)]
         fn intersect(&self, other: &Patch) -> bool {
             let max_x = if self.x > other.x { self } else { other };
             let max_y = if self.y > other.y { self } else { other };
