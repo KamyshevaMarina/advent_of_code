@@ -1,5 +1,5 @@
 extern crate day4;
-use day4::challenge1::utils;
+use day4::challenge2::utils;
 use std::fs::File;
 use std::io::Read;
 

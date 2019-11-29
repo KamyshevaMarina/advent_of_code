@@ -18,9 +18,9 @@ pub mod utils {
     #[derive(Debug)]
     pub struct Guard {
         id: u32,
-        minutes_total: u32,
         state: Action,
         last_minute: u32,
+        minutes: Vec<u32>,
     }
 
     impl Timestamp {
@@ -85,7 +85,7 @@ pub mod utils {
             if let Some(g) = guards.get_mut(&t.guard_id) {
                 match t.action {
                     Action::Wake => {
-                        g.minutes_total += t.minute - g.last_minute;
+                        g.minutes.append(&mut (g.last_minute..t.minute).collect());
                         g.last_minute = 0;
                     }
                     Action::Sleep => {
@@ -102,7 +102,7 @@ pub mod utils {
                     t.guard_id,
                     Guard {
                         id: t.guard_id,
-                        minutes_total: 0,
+                        minutes: Vec::new(),
                         last_minute: 0,
                         state: t.action.clone(),
                     },
@@ -110,38 +110,23 @@ pub mod utils {
             }
         }
         let guards: Vec<Guard> = guards.drain().map(|(_, v)| v).collect();
-        let target = guards
-            .iter()
-            .max_by(|x, y| x.minutes_total.cmp(&y.minutes_total))
-            .unwrap();
-
-        let target_timeline: Vec<Timestamp> = timeline
-            .into_iter()
-            .filter(|i| i.guard_id == target.id)
-            .collect();
-        target_timeline.iter().for_each(|i| println!("{:?}", i));
-
-        let mut iter = target_timeline.iter();
-        let mut minutes: Vec<Vec<u32>> = Vec::new();
-        loop {
-            match iter.next() {
-                Some(t) => match t.action {
-                    Action::Sleep => {
-                        minutes.push((t.minute..iter.next().unwrap().minute).collect());
-                    }
-                    _ => continue,
-                },
-                None => break,
+        let mut guard_max_minute: HashMap<u32, (u32, u32)> = HashMap::new();
+        for g in guards {
+            let mut counts: HashMap<u32, u32> = HashMap::new();
+            g.minutes
+                .iter()
+                .for_each(|&i| *counts.entry(i).or_insert(0) += 1);
+            if let Some((k, v)) = counts.iter().max_by(|(_, x), (_, y)| x.cmp(y)) {
+                println!("{}: {} - {}", g.id, k, v);
+                guard_max_minute.insert(g.id, (*k, *v));
             }
         }
-        let minutes: Vec<u32> = minutes.into_iter().flatten().collect();
-        let mut counts: HashMap<u32, u32> = HashMap::new();
-        minutes
+        let (id, (minute, _)) = guard_max_minute
             .iter()
-            .for_each(|&i| *counts.entry(i).or_insert(0) += 1);
-        let (k, _) = counts.iter().max_by(|(_, x), (_, y)| x.cmp(y)).unwrap();
-        println!("{}", k);
-        counts.iter().for_each(|i| println!("{:?}", i));
-        target.id * k
+            .max_by(|(_, (_, x)), (_, (_, y))| x.cmp(y))
+            .unwrap();
+        println!("id: {}; minute: {}", id, minute);
+
+        id * minute
     }
 }
