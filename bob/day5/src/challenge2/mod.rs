@@ -13,16 +13,16 @@ pub mod polymer {
             }
         }
 
-        fn peek(&self) -> Option<&u8> {
+        fn peek(&self) -> Option<u8> {
             if self.stack.len() > 0 {
-                Some(&(self.stack[self.head]))
+                Some(self.stack[self.head])
             } else {
                 None
             }
         }
 
         pub fn try_read(&mut self, unit: u8) {
-            if let Some(&u) = self.peek() {
+            if let Some(u) = self.peek() {
                 if (u as i32 - unit as i32).abs() == ASCII_DIFF {
                     if self.stack.len() > 1 {
                         self.head -= 1;
