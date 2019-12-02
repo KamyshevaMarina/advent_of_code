@@ -19,16 +19,18 @@ for i in dTime:
 print(srtDoc)
 listIdandTime = []
 gate = -1
+
+
 def lineId(a):
     a = re.split(r'\D', a)
     a = [x for x in a if x]
     return a[-1:][0]
 
+
 for line in srtDoc:
     if '#' in line:
         gate += 1
         listIdandTime.append([])
-        print(lineId(line))
         listIdandTime[gate].append(lineId(line))
     elif 'll' in line:
         listIdandTime[gate].append('-' + line[15:17])
@@ -45,45 +47,53 @@ listGuard = []
 gate2 = 0
 for i in idGuard:
     listGuard.append([i])
-    listGuard[gate2].append(0)
-    for j in listIdandTime:
-        if j[0] == i:
-            for item in j:
-                if j[0] != item:
-                    listGuard[gate2][1] += int(item)
+
     gate2 += 1
-print(listGuard)
-# охрианик и общее время сна
-maxsleeper = 0
+print('переменная lisguard' + str(listGuard))
+# охрианики и общее время сна
 max = 0
-for i in range(len(listGuard)):
-    if listGuard[i][1] > max:
-        max = listGuard[i][1]
-        maxsleeper = listGuard[i][0]
-print('дольше все спит охраник ' + maxsleeper)
+# for i in range(len(listGuard)):
+#     if listGuard[i][1] > max:
+#         max = listGuard[i][1]
+#         maxsleeper = listGuard[i][0]
+# print('дольше все спит охраник ' + maxsleeper)
 # выбор охраника который дольше всего спит завершен
+listGuard=list(listGuard)
 minutesOfmaxsleeper = []
-for i in range(len(listIdandTime)):
-    if listIdandTime[i][0] == maxsleeper:
-        minutesOfmaxsleeper = minutesOfmaxsleeper + listIdandTime[i][1:]
-print(minutesOfmaxsleeper)
+swap = 0
+for j in listGuard:
+    minutesOfmaxsleeper.append([j[0]])
+    for i in range(len(listIdandTime)):
+        if listIdandTime[i][0] == j[0]:
+            minutesOfmaxsleeper[swap] = minutesOfmaxsleeper[swap] + listIdandTime[i][1:]
+    swap += 1
+print('охраники плюс их все время' + str(minutesOfmaxsleeper))
 # все таймзорны сна охраника
 dict1 = {i: 0 for i in range(0, 60)}
+maxValue = 0
+maxValue2 = 0
+minute = 0
+minute2 = 0
+guard2 = ''
+for l in range(len(minutesOfmaxsleeper)):
+    for i in range(0, 59):
+        for j in range(1, len(minutesOfmaxsleeper[l]), 2):
+            for k in range(abs(int(minutesOfmaxsleeper[l][j])), minutesOfmaxsleeper[l][j + 1]):
+                if i == k:
+                    dict1[i] += 1
+    for m, f in dict1.items():
+        if f > maxValue:
+            maxValue = f
+            minute = m
+    if maxValue > maxValue2:
+        maxValue2 = maxValue
+        minute2 = minute
+        guard2 = minutesOfmaxsleeper[l][0]
+    dict1 = {i: 0 for i in range(0, 60)}
 
-for i in range(0, 59):
-    for j in range(0, len(minutesOfmaxsleeper), 2):
-        for k in range(abs(int(minutesOfmaxsleeper[j])), minutesOfmaxsleeper[j + 1]):
-            if i == k:
-                dict1[i] += 1
-maxValue=0
-minute=0
-for i,j in dict1.items():
-    if j>maxValue:
-        maxValue=j
-        minute=i
-print(str(minute)+'минута и сколько раз'+str(maxValue))
-answer = minute*int(maxsleeper)
-print('Ответ'+str(answer))
+print(str(minute) + 'минута и сколько раз' + str(maxValue) + ' номер охраника' + str(guard2))
+answer = minute * int(guard2)
+print('Ответ' + str(answer))
 
 # final_dict = dict([max(dict1.items(), key=lambda k_v: k_v[1])])
 # print('мксимальное значени'+final_dict)
