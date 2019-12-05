@@ -2,7 +2,7 @@ import re
 
 
 def manhattan_distance(v1, v2) -> int:
-    return sum((int(x) - int(y)) for (x, y) in zip(v1, v2))
+    return sum(abs(int(x) - int(y)) for (x, y) in zip(v1, v2))
 
 
 def field_boundary(a):
@@ -63,8 +63,10 @@ def find_Largest_Area():
                 elif manhattan_dista < dist:
                     dist = manhattan_dista
                     keyD = key
+                    if gate>0:
+                        gate=0
                 elif manhattan_dista == dist:
-                    gate = 1
+                    gate +=1
 
           #  print('Ключ ' + str(keyD) + 'Точка ' + '(' + str(i) + ',' + str(j) + ')' + 'дистанция ' + str(dist))
 
