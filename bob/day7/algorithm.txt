@@ -1,0 +1,22 @@
+step 1.
+Scan the targets (second element of prerequisite - target tuple). 
+Make a list of target - prerequisites (u32, [u32]) TP.
+
+step 2.
+Scan the prerequisites (first element of prerequisite - target tuple).
+Find the prerequisites that do not have any prerequisites on their own.
+Put them into a reverse sorted list (sorted queue) SQ.
+
+step 3.
+Pop the item from the sorted queue.
+Find all the targets in TP for the popped item.
+If they have more then one prerequisite, 
+   remove the popped item from the prerequisites list.
+Else move the target (removing from TP) to SQ, and resort.
+
+Step 4. 
+Push the popped item from step 3 into a result vector RV.
+Go to step 3 until there's no tuples left in TP.
+
+Step 5.
+Return RV
