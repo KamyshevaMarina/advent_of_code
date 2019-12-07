@@ -18,6 +18,10 @@ fn main() {
     let result = queuer.run();
 
     println!("THE RESULT IS: {:?}", result);
+    println!(
+        "THE RESULT IS: {:?}",
+        String::from_utf8(queuer.result.borrow().clone())
+    );
 }
 
 fn remove_item<T>(vec: &mut Vec<T>, item: T)
@@ -62,12 +66,12 @@ impl Worker {
     fn dec(&mut self) -> Status {
         match self.status {
             Status::Busy => {
-                if self.timer == self.job - 4 {
+                if self.timer == 0 {
                     self.result.borrow_mut().push(self.job);
                     self.status = Status::Idle;
                     Status::Done(self.job)
                 } else {
-                    self.timer += 1;
+                    self.timer -= 1;
                     Status::Busy
                 }
             }
@@ -78,7 +82,7 @@ impl Worker {
     fn take_job(&mut self) -> Status {
         if let Some(job) = self.rsq.borrow_mut().pop() {
             self.job = job;
-            self.timer = 0;
+            self.timer = job - 5;
             self.status = Status::Busy;
             Status::Busy
         } else {
@@ -121,9 +125,6 @@ impl Queuer {
     fn run(&mut self) -> usize {
         let mut seconds: usize = 0;
         let total = self.tpsl.len() + self.rsq.borrow().len();
-        for w in &mut self.workers {
-            w.dec();
-        }
         let mut tpsl = self.tpsl.clone();
         loop {
             for w in &mut self.workers {
@@ -147,7 +148,7 @@ impl Queuer {
                     self.rsq.borrow_mut().append(&mut t);
                     self.rsq.borrow_mut().sort();
                     self.rsq.borrow_mut().reverse();
-                    w.take_job();
+                    w.dec();
                 }
             }
             if total == self.result.borrow().len() {

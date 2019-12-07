@@ -27,6 +27,7 @@ fn main() {
     rsq.reverse(); // reverse so we can use pop()
 
     let mut result: Vec<u8> = Vec::new();
+    let mut seconds: u32 = 0;
 
     while let Some(p) = rsq.pop() {
         tpsl.iter_mut().for_each(|(_, v)| {
@@ -34,6 +35,7 @@ fn main() {
                 remove_item(v, p)
             }
         });
+        seconds += p as u32 - 4;
         let mut t: Vec<u8> = tpsl
             .iter()
             .filter(|(_, v)| v.len() == 0)
@@ -52,6 +54,7 @@ fn main() {
     }
     println!("THE RESULT IS: {:?}", result);
     println!("THE RESULT IS: {:?}", String::from_utf8(result));
+    println!("Seconds: {}", seconds);
 }
 
 fn remove_item<T>(vec: &mut Vec<T>, item: T)
