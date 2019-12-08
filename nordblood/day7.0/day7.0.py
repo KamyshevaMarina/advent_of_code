@@ -23,27 +23,19 @@ def point_list(lis):
     return _list_p
 
 
-def list_ret(answer, list_start):
+def list_ret(point, list_start):
     for i in list_class_point:
-        if i not in list(answer):
-            if i.point == point_now:
-                list_start += i.list_point_after
-                return list_start
+        if i.point == point:
+            list_start += i.list_point_after
+    return list_start
 
 
 if __name__ == "__main__":
-    d = []
-    all_point = []
-    answer = ''
-    list_class_point = []
+    d, all_point, answer, list_class_point = [], [], '', []
     with open("num.txt") as file_handler:
         for line in file_handler:
             d.append([line[5], line[36]])
-    all_point = point_list(d)
-    list_point_before = []
-    list_point_after = []
-    list_start = list()
-    list_midlle = []
+    list_point_before, list_point_after, all_point, list_start = [], [], point_list(d), list()
     for i in all_point:
         for j in d:
             if i == j[0]:
@@ -52,35 +44,35 @@ if __name__ == "__main__":
                 list_point_before.append(j[0])
         list_class_point.append(Point_tree(i, list_point_before, list_point_after))
         list_point_before, list_point_after = [], []
-
     for i in list_class_point:
         if i.start_point():
             list_start.append(i.point)
     all_point = [x for x in all_point if x not in list_start]
-    print(all_point)
-    print(list_start)
-    kol=len(list_start)
-    point_now = ''
-    point_now2 = ''
+    kol, point_now, point_now2 = len(list_start), '', ''
     while True:
-        list_start = set(list_start)
-        list_start = list(list_start)
-        list_start = sorted(list_start)
+        list_start = sorted(list(set(list_start)))
         point_now = list_start.pop(0)
-        list_for_answer = list(answer)
         for i in list_class_point:
-            if i.point == point_now:
-                if i.list_point_before not in list(answer):
-                    if list_start:
-                        list_start = sorted(list_start)
-                        point_now2 = list_start.pop(0)
-                        list_start.insert(0, point_now)
-                        point_now = point_now2
-        if point_now not in answer:
-            answer += point_now
-        if list_start:
-            list_start = list_ret(answer, list_start)
-        if len(answer) >= len(all_point)+kol:
+            if point_now == i.point:
+                if answer != []:
+                    if i.list_point_before != []:
+                        if set(i.list_point_before).issubset(answer):
+                            list_start = list_ret(point_now, list_start)
+                            answer += point_now
+                            list_start += point_now2
+                            point_now2 = ''
+                            break
+                        else:
+                            point_now2 += point_now
+                            break
+                    else:
+                        answer += point_now
+                        list_start = list_ret(point_now, list_start)
+                        break
+                else:
+                    answer += point_now
+                    list_start = list_ret(point_now, list_start)
+                    break
+        if len(answer) == kol + len(all_point):
             break
-
 print(answer)
