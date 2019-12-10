@@ -3,11 +3,11 @@ use std::fs;
 use std::rc::Rc;
 
 fn main() {
-    let mut list: Vec<u32> = fs::read_to_string("data.txt")
+    let mut list = fs::read_to_string("data.txt")
         .unwrap()
         .split('\n')
         .filter_map(|i| i.parse::<u32>().ok())
-        .collect();
+        .collect::<Vec<u32>>();
     list.reverse();
     let list = Rc::new(RefCell::new(list));
     let i = meta_get(list.clone());
