@@ -9,8 +9,7 @@ fn main() {
         .filter_map(|i| i.parse::<u32>().ok())
         .collect::<Vec<u32>>();
     list.reverse();
-    let list = Rc::new(RefCell::new(list));
-    let i = meta_get(list.clone());
+    let i = meta_get(Rc::new(RefCell::new(list)).clone());
     println!("RESULT: {}", i);
 }
 

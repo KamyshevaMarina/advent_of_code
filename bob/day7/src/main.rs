@@ -126,6 +126,9 @@ impl Queuer {
         let mut seconds: usize = 0;
         let total = self.tpsl.len() + self.rsq.borrow().len();
         let mut tpsl = self.tpsl.clone();
+        for w in &mut self.workers {
+            w.dec();
+        }
         loop {
             for w in &mut self.workers {
                 if let Status::Done(job) = w.dec() {
@@ -148,7 +151,6 @@ impl Queuer {
                     self.rsq.borrow_mut().append(&mut t);
                     self.rsq.borrow_mut().sort();
                     self.rsq.borrow_mut().reverse();
-                    w.dec();
                 }
             }
             if total == self.result.borrow().len() {
@@ -156,7 +158,6 @@ impl Queuer {
             }
 
             seconds += 1;
-            println!("{}: {:?}", seconds, tpsl);
         }
         seconds
     }
