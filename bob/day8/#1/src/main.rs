@@ -1,7 +1,5 @@
-use std::fs;
-
 fn main() {
-    let mut list = fs::read_to_string("data.txt").unwrap();
+    let mut list = std::fs::read_to_string("data.txt").unwrap();
     list.pop();
     let mut list = list
         .split(' ')
