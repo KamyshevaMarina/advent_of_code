@@ -1,32 +1,32 @@
-use std::cell::RefCell;
-use std::fs;
-use std::rc::Rc;
-
 fn main() {
-    let list = fs::read_to_string("data.txt").unwrap();
-    let mut list = list.split('\n').collect::<Vec<&str>>();
+    let mut list = std::fs::read_to_string("data.txt").unwrap();
     list.pop();
-    let mut list = list[0]
+    let mut list = list
         .split(' ')
-        .filter_map(|i| i.parse::<u32>().ok())
-        .collect::<Vec<u32>>();
+        .filter_map(|i| i.parse::<usize>().ok())
+        .collect::<Vec<usize>>();
     list.reverse();
-    let i = meta_get(Rc::new(RefCell::new(list)).clone());
+    let i = value_get(&mut list);
     println!("RESULT: {}", i);
 }
 
-fn children_get<'a>(list &'a [u32]) -> Vec<(u32, &'a [u32])> {}
-fn meta_get(list: Rc<RefCell<Vec<u32>>>) -> u32 {
-    let count = list.borrow_mut().pop().unwrap();
-    let meta_count = list.borrow_mut().pop().unwrap();
-    let mut meta_sum = 0;
-    if count > 0 {
-        for _ in 0..count {
-            meta_sum += meta_get(list.clone());
+fn value_get(list: &mut Vec<usize>) -> usize {
+    let nodes = list.pop().unwrap();
+    let meta = list.pop().unwrap();
+    let mut value = 0;
+    let mut children: Vec<usize> = Vec::new();
+    for _ in 0..nodes {
+        children.push(value_get(list));
+    }
+    for _ in 0..meta {
+        let i = list.pop().unwrap();
+        if nodes != 0 {
+            if i <= nodes && i > 0 {
+                value += children[i - 1];
+            }
+        } else {
+            value += i;
         }
     }
-    for _ in 0..meta_count {
-        meta_sum += list.borrow_mut().pop().unwrap();
-    }
-    meta_sum
+    value
 }
