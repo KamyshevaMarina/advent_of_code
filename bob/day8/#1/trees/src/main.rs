@@ -3,9 +3,11 @@ use std::fs;
 use std::rc::Rc;
 
 fn main() {
-    let mut list = fs::read_to_string("data.txt")
-        .unwrap()
-        .split('\n')
+    let list = fs::read_to_string("data.txt").unwrap();
+    let mut list = list.split('\n').collect::<Vec<&str>>();
+    list.pop();
+    let mut list = list[0]
+        .split(' ')
         .filter_map(|i| i.parse::<u32>().ok())
         .collect::<Vec<u32>>();
     list.reverse();
