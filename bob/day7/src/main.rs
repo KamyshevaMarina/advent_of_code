@@ -7,7 +7,7 @@ use std::rc::Rc;
 const COUNT: usize = 5;
 
 fn main() {
-    let tpl = fs::read_to_string("ilya.txt").unwrap();
+    let tpl = fs::read_to_string("data.txt").unwrap();
     let mut tpl = tpl
         .split('\n')
         .map(|i| i.as_bytes())
@@ -18,6 +18,7 @@ fn main() {
     let mut ps = HashSet::new();
 
     let tpl = tpl.iter().map(|i| (i[36], i[5])).collect::<Vec<(u8, u8)>>();
+
     tpl.iter().for_each(|(t, p)| {
         ts.insert(*t);
         ps.insert(*p);
@@ -26,7 +27,6 @@ fn main() {
     let queue = Rc::new(RefCell::new(
         ps.difference(&ts).map(|&i| i).collect::<Vec<u8>>(),
     ));
-    println!("QUEUE : {:?}", queue.borrow());
 
     let result = Rc::new(RefCell::new(Vec::new()));
 
@@ -40,6 +40,7 @@ fn main() {
 
     queue.borrow_mut().sort();
     queue.borrow_mut().reverse();
+
     let mut workers = Vec::new();
 
     for _ in 0..COUNT {
@@ -52,20 +53,20 @@ fn main() {
         });
     }
     let mut seconds = 0;
+
     while result.borrow().len() != 26 {
-        seconds += 1;
         for w in &mut workers {
             w.tick();
         }
         for w in &mut workers {
             w.tack();
         }
+        seconds += 1;
     }
 
     println!("ANSWER : {}", seconds - 1);
 }
 
-#[derive(Debug)]
 struct Worker {
     targets: Rc<RefCell<HashMap<u8, HashSet<u8>>>>,
     queue: Rc<RefCell<Vec<u8>>>,
@@ -75,9 +76,9 @@ struct Worker {
 }
 
 impl Worker {
-    fn tick(&mut self) -> bool {
+    fn tick(&mut self) {
         if self.countdown == 0 && self.job != 0 {
-            return self.tock();
+            self.tock();
         } else if self.job == 0 {
             if let Some(job) = self.queue.borrow_mut().pop() {
                 self.job = job;
@@ -86,7 +87,6 @@ impl Worker {
         } else if self.countdown > 0 && self.job > 0 {
             self.countdown -= 1;
         }
-        false
     }
     fn tack(&mut self) {
         if self.job == 0 {
@@ -97,7 +97,7 @@ impl Worker {
         }
     }
 
-    fn tock(&mut self) -> bool {
+    fn tock(&mut self) {
         self.targets.borrow_mut().iter_mut().for_each(|(_, v)| {
             v.remove(&self.job);
         });
@@ -117,8 +117,6 @@ impl Worker {
         if self.queue.borrow().len() > 0 {
             self.queue.borrow_mut().sort();
             self.queue.borrow_mut().reverse();
-            return true;
         }
-        false
     }
 }
