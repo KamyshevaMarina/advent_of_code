@@ -1,70 +1,124 @@
+use std::cell::RefCell;
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::Read;
+use std::collections::HashSet;
+use std::fs;
+use std::rc::Rc;
+
+const COUNT: usize = 5;
 
 fn main() {
-    let mut f = File::open("data.txt").expect("file not found");
-    let mut s = String::new();
-    f.read_to_string(&mut s).expect("IO error");
-    let mut ptl = s.split('\n').collect::<Vec<&str>>(); // prerequisite - target list
-    ptl.pop().unwrap();
-    let ptl: Vec<(u8, u8)> = ptl
-        .iter()
-        .map(|i| (i.as_bytes()[5], i.as_bytes()[36])) // extracting step designations
-        .collect();
-    let mut tpsl: HashMap<u8, Vec<u8>> = HashMap::with_capacity(70); // target - prerequisites list
-    ptl.iter()
-        .for_each(|(p, t)| tpsl.entry(*t).or_insert(Vec::new()).push(*p));
-    let mut rsq: Vec<u8> = Vec::with_capacity(50); // reverse sorted queue
-    ptl.iter().for_each(|(p, _)| {
-        if !tpsl.contains_key(p) {
-            rsq.push(*p)
-        }
+    let tpl = fs::read_to_string("ilya.txt").unwrap();
+    let mut tpl = tpl
+        .split('\n')
+        .map(|i| i.as_bytes())
+        .collect::<Vec<&[u8]>>();
+    tpl.pop();
+
+    let mut ts = HashSet::new();
+    let mut ps = HashSet::new();
+
+    let tpl = tpl.iter().map(|i| (i[36], i[5])).collect::<Vec<(u8, u8)>>();
+    tpl.iter().for_each(|(t, p)| {
+        ts.insert(*t);
+        ps.insert(*p);
     });
 
-    rsq.sort(); // sort in alphabetical order
-    rsq.dedup();
-    rsq.reverse(); // reverse so we can use pop()
+    let queue = Rc::new(RefCell::new(
+        ps.difference(&ts).map(|&i| i).collect::<Vec<u8>>(),
+    ));
+    println!("QUEUE : {:?}", queue.borrow());
 
-    let mut result: Vec<u8> = Vec::new();
-    let mut seconds: u32 = 0;
+    let result = Rc::new(RefCell::new(Vec::new()));
 
-    while let Some(p) = rsq.pop() {
-        tpsl.iter_mut().for_each(|(_, v)| {
-            if v.contains(&p) {
-                remove_item(v, p)
-            }
+    let mut targets: HashMap<u8, HashSet<u8>> = HashMap::new();
+
+    tpl.iter().for_each(|(t, p)| {
+        targets.entry(*t).or_insert(HashSet::new()).insert(*p);
+    });
+
+    let targets = Rc::new(RefCell::new(targets));
+
+    queue.borrow_mut().sort();
+    queue.borrow_mut().reverse();
+    let mut workers = Vec::new();
+
+    for _ in 0..COUNT {
+        workers.push(Worker {
+            targets: targets.clone(),
+            queue: queue.clone(),
+            result: result.clone(),
+            countdown: 0,
+            job: 0,
         });
-        seconds += p as u32 - 4;
-        let mut t: Vec<u8> = tpsl
-            .iter()
-            .filter(|(_, v)| v.len() == 0)
-            .map(|(k, _)| *k)
-            .collect();
-        let clone = tpsl.clone();
-        for (k, _) in clone.iter() {
-            if t.contains(k) {
-                tpsl.remove(k);
-            }
-        }
-        rsq.append(&mut t);
-        rsq.sort();
-        rsq.reverse();
-        result.push(p);
     }
-    println!("THE RESULT IS: {:?}", result);
-    println!("THE RESULT IS: {:?}", String::from_utf8(result));
-    println!("Seconds: {}", seconds);
+    let mut seconds = 0;
+    while result.borrow().len() != 26 {
+        seconds += 1;
+        for w in &mut workers {
+            w.tick();
+        }
+        for w in &mut workers {
+            w.tack();
+        }
+    }
+
+    println!("ANSWER : {}", seconds - 1);
 }
 
-fn remove_item<T>(vec: &mut Vec<T>, item: T)
-where
-    T: Eq + Copy,
-{
-    for (n, i) in vec.iter().enumerate() {
-        if *i == item {
-            vec.remove(n);
-            return;
+#[derive(Debug)]
+struct Worker {
+    targets: Rc<RefCell<HashMap<u8, HashSet<u8>>>>,
+    queue: Rc<RefCell<Vec<u8>>>,
+    result: Rc<RefCell<Vec<u8>>>,
+    countdown: u8,
+    job: u8,
+}
+
+impl Worker {
+    fn tick(&mut self) -> bool {
+        if self.countdown == 0 && self.job != 0 {
+            return self.tock();
+        } else if self.job == 0 {
+            if let Some(job) = self.queue.borrow_mut().pop() {
+                self.job = job;
+                self.countdown = job - 5;
+            }
+        } else if self.countdown > 0 && self.job > 0 {
+            self.countdown -= 1;
         }
+        false
+    }
+    fn tack(&mut self) {
+        if self.job == 0 {
+            if let Some(job) = self.queue.borrow_mut().pop() {
+                self.job = job;
+                self.countdown = job - 5;
+            }
+        }
+    }
+
+    fn tock(&mut self) -> bool {
+        self.targets.borrow_mut().iter_mut().for_each(|(_, v)| {
+            v.remove(&self.job);
+        });
+        self.targets.borrow_mut().iter().for_each(|(k, v)| {
+            if v.is_empty() {
+                self.queue.borrow_mut().push(*k);
+            }
+        });
+
+        for j in self.queue.borrow().iter() {
+            self.targets.borrow_mut().remove(j);
+        }
+
+        self.result.borrow_mut().push(self.job);
+        self.job = 0;
+
+        if self.queue.borrow().len() > 0 {
+            self.queue.borrow_mut().sort();
+            self.queue.borrow_mut().reverse();
+            return true;
+        }
+        false
     }
 }

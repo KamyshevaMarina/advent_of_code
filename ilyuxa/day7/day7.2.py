@@ -41,8 +41,8 @@ def main():
     for i in list_class_point.items():
         if i[1].list_point_before == []:
             list_statement.append(i[0])
-    time_point = {i: j+60 for i, j in zip(string.ascii_uppercase, range(1, len(string.ascii_uppercase) + 1))}
-    step, len_worker, time_now, = 0, {i: [0, 0] for i in range(5)}, -2
+    time_point = {i: j for i, j in zip(string.ascii_uppercase, range(1, len(string.ascii_uppercase) + 1))}
+    step, len_worker, time_now, = 0, {i: [0, 0] for i in range(2)}, -2
 
     while True:
         time_now += 1
