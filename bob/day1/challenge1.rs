@@ -13,7 +13,7 @@ fn main() {
         .collect::<Vec<i32>>();
     numbers.pop().unwrap(); // pop пустую строку в конце
     println!(
-        "frequncy drift: {}",
+        "frequency drift: {}",
         numbers.iter().fold(0, |acc, i| acc + i)
     );
 }

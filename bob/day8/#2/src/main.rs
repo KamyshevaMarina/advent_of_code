@@ -15,6 +15,7 @@ fn main() {
     println!("RESULT: {}", i);
 }
 
+fn children_get<'a>(list &'a [u32]) -> Vec<(u32, &'a [u32])> {}
 fn meta_get(list: Rc<RefCell<Vec<u32>>>) -> u32 {
     let count = list.borrow_mut().pop().unwrap();
     let meta_count = list.borrow_mut().pop().unwrap();
