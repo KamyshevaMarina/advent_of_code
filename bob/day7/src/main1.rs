@@ -1,10 +1,6 @@
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::fs;
-use std::rc::Rc;
-
-const COUNT: usize = 5;
 
 fn main() {
     let tpl = fs::read_to_string("data.txt").unwrap();
@@ -24,11 +20,7 @@ fn main() {
         ps.insert(*p);
     });
 
-    let queue = Rc::new(RefCell::new(
-        ps.difference(&ts).map(|&i| i).collect::<Vec<u8>>(),
-    ));
-
-    let result = Rc::new(RefCell::new(Vec::new()));
+    let mut queue = ps.difference(&ts).map(|&i| i).collect::<Vec<u8>>();
 
     let mut targets: HashMap<u8, HashSet<u8>> = HashMap::new();
 
@@ -36,87 +28,29 @@ fn main() {
         targets.entry(*t).or_insert(HashSet::new()).insert(*p);
     });
 
-    let targets = Rc::new(RefCell::new(targets));
+    queue.sort(); // sort in alphabetical order
+    queue.reverse(); // reverse so we can use pop()
 
-    queue.borrow_mut().sort();
-    queue.borrow_mut().reverse();
+    let mut result: Vec<u8> = Vec::new();
 
-    let mut workers = Vec::new();
-
-    for _ in 0..COUNT {
-        workers.push(Worker {
-            targets: targets.clone(),
-            queue: queue.clone(),
-            result: result.clone(),
-            countdown: 0,
-            job: 0,
+    while let Some(job) = queue.pop() {
+        targets.iter_mut().for_each(|(_, v)| {
+            v.remove(&job);
         });
-    }
-    let mut seconds = 0;
-
-    while result.borrow().len() != 26 {
-        for w in &mut workers {
-            w.tick();
-        }
-        for w in &mut workers {
-            w.tack();
-        }
-        seconds += 1;
-    }
-
-    println!("ANSWER : {}", seconds - 1);
-}
-
-struct Worker {
-    targets: Rc<RefCell<HashMap<u8, HashSet<u8>>>>,
-    queue: Rc<RefCell<Vec<u8>>>,
-    result: Rc<RefCell<Vec<u8>>>,
-    countdown: u8,
-    job: u8,
-}
-
-impl Worker {
-    fn tick(&mut self) {
-        if self.countdown == 0 && self.job != 0 {
-            self.tock();
-        } else if self.job == 0 {
-            if let Some(job) = self.queue.borrow_mut().pop() {
-                self.job = job;
-                self.countdown = job - 5;
-            }
-        } else if self.countdown > 0 && self.job > 0 {
-            self.countdown -= 1;
-        }
-    }
-    fn tack(&mut self) {
-        if self.job == 0 {
-            if let Some(job) = self.queue.borrow_mut().pop() {
-                self.job = job;
-                self.countdown = job - 5;
-            }
-        }
-    }
-
-    fn tock(&mut self) {
-        self.targets.borrow_mut().iter_mut().for_each(|(_, v)| {
-            v.remove(&self.job);
-        });
-        self.targets.borrow_mut().iter().for_each(|(k, v)| {
+        targets.iter().for_each(|(k, v)| {
             if v.is_empty() {
-                self.queue.borrow_mut().push(*k);
+                queue.push(*k);
             }
         });
 
-        for j in self.queue.borrow().iter() {
-            self.targets.borrow_mut().remove(j);
+        for j in queue.iter() {
+            targets.remove(j);
         }
 
-        self.result.borrow_mut().push(self.job);
-        self.job = 0;
-
-        if self.queue.borrow().len() > 0 {
-            self.queue.borrow_mut().sort();
-            self.queue.borrow_mut().reverse();
-        }
+        result.push(job);
+        queue.sort();
+        queue.reverse();
     }
+    println!("THE RESULT IS: {:?}", result);
+    println!("THE RESULT IS: {:?}", String::from_utf8(result));
 }
