@@ -15,31 +15,8 @@ fn main() {
     let mut players = [0; 410];
     for marble in 1..7205901 {
         players[(marble - 1) % 410] += circle.insert(marble);
-        // print!(
-        //     "{:?} ",
-        //     circle
-        //         .current
-        //         .borrow()
-        //         .previous
-        //         .clone()
-        //         .unwrap()
-        //         .borrow()
-        //         .value
-        // );
-        // print!("{} ", circle.current.borrow().value);
-        // print!(
-        //     "{:?}\n",
-        //     circle.current.borrow().next.clone().unwrap().borrow().value
-        // );
     }
-    println!(
-        "Winner: {:?}",
-        players
-            .iter()
-            .enumerate()
-            .max_by(|(_, x), (_, y)| x.cmp(y))
-            .unwrap()
-    );
+    println!("Winner: {:?}", players.iter().max().unwrap());
 }
 
 #[derive(Debug)]
