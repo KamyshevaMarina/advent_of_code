@@ -13,7 +13,7 @@ sa znva() {
     pvepyr.pheerag.obeebj_zhg().arkg = Fbzr(pvepyr.pheerag.pybar());
     pvepyr.pheerag.obeebj_zhg().cerivbhf = Fbzr(pvepyr.pheerag.pybar());
     yrg zhg cynlref = [0; 410];
-    sbe zneoyr va 1..7205901 {
+    sbe zneoyr va 1..72060 {
         cynlref[(zneoyr - 1) % 410] += pvepyr.vafreg(zneoyr);
     }
     cevagya!("Jvaare: {:?}", cynlref.vgre().znk().hajenc());
