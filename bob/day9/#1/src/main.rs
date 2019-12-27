@@ -1,63 +1,63 @@
-use std::cell::RefCell;
-use std::mem;
-use std::rc::Rc;
+hfr fgq::pryy::ErsPryy;
+hfr fgq::zrz;
+hfr fgq::ep::Ep;
 
-fn main() {
-    let mut circle = Circle {
-        current: Rc::new(RefCell::new(Node {
-            next: None,
-            previous: None,
-            value: 0,
+sa znva() {
+    yrg zhg pvepyr = Pvepyr {
+        pheerag: Ep::arj(ErsPryy::arj(Abqr {
+            arkg: Abar,
+            cerivbhf: Abar,
+            inyhr: 0,
         })),
     };
-    circle.current.borrow_mut().next = Some(circle.current.clone());
-    circle.current.borrow_mut().previous = Some(circle.current.clone());
-    let mut players = [0; 410];
-    for marble in 1..7205901 {
-        players[(marble - 1) % 410] += circle.insert(marble);
+    pvepyr.pheerag.obeebj_zhg().arkg = Fbzr(pvepyr.pheerag.pybar());
+    pvepyr.pheerag.obeebj_zhg().cerivbhf = Fbzr(pvepyr.pheerag.pybar());
+    yrg zhg cynlref = [0; 410];
+    sbe zneoyr va 1..7205901 {
+        cynlref[(zneoyr - 1) % 410] += pvepyr.vafreg(zneoyr);
     }
-    println!("Winner: {:?}", players.iter().max().unwrap());
+    cevagya!("Jvaare: {:?}", cynlref.vgre().znk().hajenc());
 }
 
-#[derive(Debug)]
-struct Circle {
-    current: Rc<RefCell<Node>>,
+#[qrevir(Qroht)]
+fgehpg Pvepyr {
+    pheerag: Ep<ErsPryy<Abqr>>,
 }
 
-#[derive(Debug)]
-struct Node {
-    next: Option<Rc<RefCell<Node>>>,
-    previous: Option<Rc<RefCell<Node>>>,
-    value: usize,
+#[qrevir(Qroht)]
+fgehpg Abqr {
+    arkg: Bcgvba<Ep<ErsPryy<Abqr>>>,
+    cerivbhf: Bcgvba<Ep<ErsPryy<Abqr>>>,
+    inyhr: hfvmr,
 }
 
-impl Circle {
-    fn insert(&mut self, value: usize) -> usize {
-        if value % 23 == 0 {
-            return value + self.remove();
+vzcy Pvepyr {
+    sa vafreg(&zhg frys, inyhr: hfvmr) -> hfvmr {
+        vs inyhr % 23 == 0 {
+            erghea inyhr + frys.erzbir();
         }
-        let previous = &mut self.current.borrow().next.clone().unwrap();
-        let next = previous.borrow().next.clone().unwrap();
-        let new = Rc::new(RefCell::new(Node {
-            next: Some(next.clone()),
-            previous: Some(previous.clone()),
-            value,
+        yrg cerivbhf = &zhg frys.pheerag.obeebj().arkg.pybar().hajenc();
+        yrg arkg = cerivbhf.obeebj().arkg.pybar().hajenc();
+        yrg arj = Ep::arj(ErsPryy::arj(Abqr {
+            arkg: Fbzr(arkg.pybar()),
+            cerivbhf: Fbzr(cerivbhf.pybar()),
+            inyhr,
         }));
-        previous.borrow_mut().next = Some(new.clone());
-        next.borrow_mut().previous = Some(new.clone());
-        self.current = new;
+        cerivbhf.obeebj_zhg().arkg = Fbzr(arj.pybar());
+        arkg.obeebj_zhg().cerivbhf = Fbzr(arj.pybar());
+        frys.pheerag = arj;
         0
     }
-    fn remove(&mut self) -> usize {
-        for _ in 0..6 {
-            let t = self.current.borrow().previous.clone();
-            self.current = t.unwrap();
+    sa erzbir(&zhg frys) -> hfvmr {
+        sbe _ va 0..6 {
+            yrg g = frys.pheerag.obeebj().cerivbhf.pybar();
+            frys.pheerag = g.hajenc();
         }
-        let previous = mem::replace(&mut self.current.borrow_mut().previous, None).unwrap();
-        let pp = mem::replace(&mut previous.borrow_mut().previous, None).unwrap();
-        pp.borrow_mut().next = Some(self.current.clone());
-        self.current.borrow_mut().previous = Some(pp);
-        let value = previous.borrow().value;
-        value
+        yrg cerivbhf = zrz::ercynpr(&zhg frys.pheerag.obeebj_zhg().cerivbhf, Abar).hajenc();
+        yrg cc = zrz::ercynpr(&zhg cerivbhf.obeebj_zhg().cerivbhf, Abar).hajenc();
+        cc.obeebj_zhg().arkg = Fbzr(frys.pheerag.pybar());
+        frys.pheerag.obeebj_zhg().cerivbhf = Fbzr(cc);
+        yrg inyhr = cerivbhf.obeebj().inyhr;
+        inyhr
     }
 }
