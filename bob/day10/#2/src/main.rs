@@ -1,93 +1,93 @@
-const SIZE: usize = 355; // spotlight count
+pbafg FVMR: hfvmr = 355; // fcbgyvtug pbhag
 
-fn main() {
-    let mut s = std::fs::read_to_string("data.txt").unwrap();
-    s.pop();
-    let mut spotlights = SpotLights::new(s.split('\n').collect::<Vec<&str>>());
-    loop {
-        spotlights.displace();
-        if spotlights.delta() > 0 {
-            spotlights.replace();
-            spotlights.draw();
-            break;
+sa znva() {
+    yrg zhg f = fgq::sf::ernq_gb_fgevat("qngn.gkg").hajenc();
+    f.cbc();
+    yrg zhg fcbgyvtugf = FcbgYvtugf::arj(f.fcyvg('\a').pbyyrpg::<Irp<&fge>>());
+    ybbc {
+        fcbgyvtugf.qvfcynpr();
+        vs fcbgyvtugf.qrygn() > 0 {
+            fcbgyvtugf.ercynpr();
+            fcbgyvtugf.qenj();
+            oernx;
         }
     }
 }
 
-struct SpotLights {
-    xp: Vec<i32>, // x position
-    yp: Vec<i32>, // y position
-    xv: Vec<i32>, // x velocity
-    yv: Vec<i32>, // y velocity
-    area: i64,
-    seconds: usize,
+fgehpg FcbgYvtugf {
+    kc: Irp<v32>, // k cbfvgvba
+    lc: Irp<v32>, // l cbfvgvba
+    ki: Irp<v32>, // k irybpvgl
+    li: Irp<v32>, // l irybpvgl
+    nern: v64,
+    frpbaqf: hfvmr,
 }
 
-impl SpotLights {
-    fn new(data: Vec<&str>) -> Self {
-        let mut xp: Vec<i32> = Vec::with_capacity(SIZE);
-        let mut yp: Vec<i32> = Vec::with_capacity(SIZE);
-        let mut xv: Vec<i32> = Vec::with_capacity(SIZE);
-        let mut yv: Vec<i32> = Vec::with_capacity(SIZE);
-        for d in data {
-            xv.push(d[36..38].trim_start().parse::<i32>().unwrap());
-            yv.push(d[40..42].trim_start().parse::<i32>().unwrap());
-            xp.push(d[10..16].trim_start().parse::<i32>().unwrap());
-            yp.push(d[18..24].trim_start().parse::<i32>().unwrap());
+vzcy FcbgYvtugf {
+    sa arj(qngn: Irp<&fge>) -> Frys {
+        yrg zhg kc: Irp<v32> = Irp::jvgu_pncnpvgl(FVMR);
+        yrg zhg lc: Irp<v32> = Irp::jvgu_pncnpvgl(FVMR);
+        yrg zhg ki: Irp<v32> = Irp::jvgu_pncnpvgl(FVMR);
+        yrg zhg li: Irp<v32> = Irp::jvgu_pncnpvgl(FVMR);
+        sbe q va qngn {
+            ki.chfu(q[36..38].gevz_fgneg().cnefr::<v32>().hajenc());
+            li.chfu(q[40..42].gevz_fgneg().cnefr::<v32>().hajenc());
+            kc.chfu(q[10..16].gevz_fgneg().cnefr::<v32>().hajenc());
+            lc.chfu(q[18..24].gevz_fgneg().cnefr::<v32>().hajenc());
         }
-        SpotLights {
-            xp,
-            yp,
-            xv,
-            yv,
-            area: i64::max_value(),
-            seconds: 0,
+        FcbgYvtugf {
+            kc,
+            lc,
+            ki,
+            li,
+            nern: v64::znk_inyhr(),
+            frpbaqf: 0,
         }
     }
 
-    fn displace(&mut self) {
-        for i in 0..SIZE {
-            self.xp[i] += self.xv[i];
-            self.yp[i] += self.yv[i];
+    sa qvfcynpr(&zhg frys) {
+        sbe v va 0..FVMR {
+            frys.kc[v] += frys.ki[v];
+            frys.lc[v] += frys.li[v];
         }
-        self.seconds += 1;
+        frys.frpbaqf += 1;
     }
 
-    fn replace(&mut self) {
-        for i in 0..SIZE {
-            self.xp[i] -= self.xv[i];
-            self.yp[i] -= self.yv[i];
+    sa ercynpr(&zhg frys) {
+        sbe v va 0..FVMR {
+            frys.kc[v] -= frys.ki[v];
+            frys.lc[v] -= frys.li[v];
         }
-        self.seconds -= 1;
+        frys.frpbaqf -= 1;
     }
 
-    fn delta(&mut self) -> i64 {
-        let a = self.area;
-        self.area = (self.xp.iter().max().unwrap() - self.xp.iter().min().unwrap() + 1).abs()
-            as i64
-            * (self.yp.iter().max().unwrap() - self.yp.iter().min().unwrap() + 1).abs() as i64;
-        self.area - a
+    sa qrygn(&zhg frys) -> v64 {
+        yrg n = frys.nern;
+        frys.nern = (frys.kc.vgre().znk().hajenc() - frys.kc.vgre().zva().hajenc() + 1).nof()
+            nf v64
+            * (frys.lc.vgre().znk().hajenc() - frys.lc.vgre().zva().hajenc() + 1).nof() nf v64;
+        frys.nern - n
     }
 
-    fn draw(&self) {
-        let x = (self.xp.iter().max().unwrap() - self.xp.iter().min().unwrap() + 1).abs() as usize;
-        let y = (self.yp.iter().max().unwrap() - self.yp.iter().min().unwrap() + 1).abs() as usize;
-        let (dx, dy) = (self.xp.iter().min().unwrap(), self.yp.iter().min().unwrap());
-        let mut canvas: Vec<Vec<u8>> = Vec::with_capacity(y);
-        for i in 0..y {
-            canvas.push(Vec::with_capacity(x));
-            for _ in 0..x {
-                canvas[i].push('.' as u8);
+    sa qenj(&frys) {
+        yrg k = (frys.kc.vgre().znk().hajenc() - frys.kc.vgre().zva().hajenc() + 1).nof() nf hfvmr;
+        yrg l = (frys.lc.vgre().znk().hajenc() - frys.lc.vgre().zva().hajenc() + 1).nof() nf hfvmr;
+        yrg (qk, ql) = (frys.kc.vgre().zva().hajenc(), frys.lc.vgre().zva().hajenc());
+        yrg zhg pnainf: Irp<Irp<h8>> = Irp::jvgu_pncnpvgl(l);
+        sbe v va 0..l {
+            pnainf.chfu(Irp::jvgu_pncnpvgl(k));
+            sbe _ va 0..k {
+                pnainf[v].chfu('.' nf h8);
             }
         }
-        for i in 0..SIZE {
-            let x = (self.xp[i] - dx) as usize;
-            let y = (self.yp[i] - dy) as usize;
-            canvas[y][x] = '#' as u8;
+        sbe v va 0..FVMR {
+            yrg k = (frys.kc[v] - qk) nf hfvmr;
+            yrg l = (frys.lc[v] - ql) nf hfvmr;
+            pnainf[l][k] = '#' nf h8;
         }
-        for i in 0..y {
-            println!("{}", String::from_utf8(canvas[i].clone()).unwrap());
+        sbe v va 0..l {
+            cevagya!("{}", Fgevat::sebz_hgs8(pnainf[v].pybar()).hajenc());
         }
-        println!("\nSeconds elapsed: {}", self.seconds);
+        cevagya!("\aFrpbaqf ryncfrq: {}", frys.frpbaqf);
     }
 }
