@@ -1,10 +1,12 @@
+const SIZE: usize = 355; // spotlight count
+const ACC: i32 = 10300; // acceleration factor
+
 fn main() {
     let mut s = std::fs::read_to_string("data.txt").unwrap();
     s.pop();
     let mut spotlights = SpotLights::new(s.split('\n').collect::<Vec<&str>>());
-    for _ in 0..12000 {
+    loop {
         spotlights.displace();
-
         if spotlights.delta() > 0 {
             spotlights.replace();
             spotlights.draw();
@@ -12,9 +14,7 @@ fn main() {
         }
     }
 }
-const SIZE: usize = 355; // spotlight count
 
-#[derive(Debug)]
 struct SpotLights {
     xp: Vec<i32>, // x position
     yp: Vec<i32>, // y position
@@ -32,8 +32,8 @@ impl SpotLights {
         for d in data {
             xv.push(d[36..38].trim_start().parse::<i32>().unwrap());
             yv.push(d[40..42].trim_start().parse::<i32>().unwrap());
-            xp.push(d[10..16].trim_start().parse::<i32>().unwrap());
-            yp.push(d[18..24].trim_start().parse::<i32>().unwrap());
+            xp.push(d[10..16].trim_start().parse::<i32>().unwrap() + xv.last().unwrap() * ACC);
+            yp.push(d[18..24].trim_start().parse::<i32>().unwrap() + yv.last().unwrap() * ACC);
         }
         SpotLights {
             xp,
@@ -50,6 +50,7 @@ impl SpotLights {
             self.yp[i] += self.yv[i];
         }
     }
+
     fn replace(&mut self) {
         for i in 0..SIZE {
             self.xp[i] -= self.xv[i];
@@ -69,7 +70,6 @@ impl SpotLights {
         let x = (self.xp.iter().max().unwrap() - self.xp.iter().min().unwrap() + 1).abs() as usize;
         let y = (self.yp.iter().max().unwrap() - self.yp.iter().min().unwrap() + 1).abs() as usize;
         let (dx, dy) = (self.xp.iter().min().unwrap(), self.yp.iter().min().unwrap());
-        println!("x: {}, y: {}, dx: {}, dy: {}", x, y, dx, dy);
         let mut canvas: Vec<Vec<u8>> = Vec::with_capacity(y);
         for i in 0..y {
             canvas.push(Vec::with_capacity(x));
