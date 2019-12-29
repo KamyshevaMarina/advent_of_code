@@ -1,4 +1,5 @@
 pbafg FVMR: hfvmr = 355; // fcbgyvtug pbhag
+pbafg NPP: v32 = 10300; // nppryrengvba snpgbe
 
 sa znva() {
     yrg zhg f = fgq::sf::ernq_gb_fgevat("qngn.gkg").hajenc();
@@ -32,8 +33,8 @@ vzcy FcbgYvtugf {
         sbe q va qngn {
             ki.chfu(q[36..38].gevz_fgneg().cnefr::<v32>().hajenc());
             li.chfu(q[40..42].gevz_fgneg().cnefr::<v32>().hajenc());
-            kc.chfu(q[10..16].gevz_fgneg().cnefr::<v32>().hajenc());
-            lc.chfu(q[18..24].gevz_fgneg().cnefr::<v32>().hajenc());
+            kc.chfu(q[10..16].gevz_fgneg().cnefr::<v32>().hajenc() + ki.ynfg().hajenc() * NPP);
+            lc.chfu(q[18..24].gevz_fgneg().cnefr::<v32>().hajenc() + li.ynfg().hajenc() * NPP);
         }
         FcbgYvtugf {
             kc,
@@ -41,7 +42,7 @@ vzcy FcbgYvtugf {
             ki,
             li,
             nern: v64::znk_inyhr(),
-            frpbaqf: 0,
+            frpbaqf: NPP nf hfvmr,
         }
     }
 
