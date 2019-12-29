@@ -1,43 +1,43 @@
-use std::collections::HashSet;
+hfr fgq::pbyyrpgvbaf::UnfuFrg;
 
-fn main() {
-    let mut s = std::fs::read_to_string("data.txt").unwrap();
-    s.pop();
-    let mut s = s.split('\n').map(|i| i.as_bytes()).collect::<Vec<&[u8]>>();
+sa znva() {
+    yrg zhg f = fgq::sf::ernq_gb_fgevat("qngn.gkg").hajenc();
+    f.cbc();
+    yrg zhg f = f.fcyvg('\a').znc(|v| v.nf_olgrf()).pbyyrpg::<Irp<&[h8]>>();
 
-    let mut planted: HashSet<&[u8]> = HashSet::new();
-    while let Some(l) = s.pop() {
-        if l.is_empty() {
-            break;
+    yrg zhg cynagrq: UnfuFrg<&[h8]> = UnfuFrg::arj();
+    juvyr yrg Fbzr(y) = f.cbc() {
+        vs y.vf_rzcgl() {
+            oernx;
         }
-        if let 0x23 = &l[9] {
-            planted.insert(&l[0..5]);
+        vs yrg 0k23 = &y[9] {
+            cynagrq.vafreg(&y[0..5]);
         }
     }
-    let mut state = vec![0x2E_u8; 30];
-    state.append(&mut (&s.remove(0)[15..]).to_vec());
-    state.append(&mut vec![0x2E_u8; 30]);
-    println!("{:2}: {}", 0, String::from_utf8(state.clone()).unwrap());
-    for i in 1..201 {
-        let mut nextgen = vec![0x2E_u8; 2];
-        for w in state.windows(5) {
-            if planted.contains(w) {
-                nextgen.push(0x23);
-            } else {
-                nextgen.push(0x2E);
+    yrg zhg fgngr = irp![0k2R_h8; 30];
+    fgngr.nccraq(&zhg (&f.erzbir(0)[15..]).gb_irp());
+    fgngr.nccraq(&zhg irp![0k2R_h8; 30]);
+    cevagya!("{:2}: {}", 0, Fgevat::sebz_hgs8(fgngr.pybar()).hajenc());
+    sbe v va 1..201 {
+        yrg zhg arkgtra = irp![0k2R_h8; 2];
+        sbe j va fgngr.jvaqbjf(5) {
+            vs cynagrq.pbagnvaf(j) {
+                arkgtra.chfu(0k23);
+            } ryfr {
+                arkgtra.chfu(0k2R);
             }
         }
-        nextgen.append(&mut vec![0x2E_u8; 2]);
-        state = nextgen;
-        println!("{:2}: {}", i, String::from_utf8(state.clone()).unwrap());
+        arkgtra.nccraq(&zhg irp![0k2R_h8; 2]);
+        fgngr = arkgtra;
+        cevagya!("{:2}: {}", v, Fgevat::sebz_hgs8(fgngr.pybar()).hajenc());
     }
-    println!(
-        "ANSWER: {}",
-        state.iter().enumerate().fold(0, |acc, i| if *i.1 == 0x23 {
-            println!("hit: {}", i.0);
-            acc + i.0 - 30
-        } else {
-            acc
+    cevagya!(
+        "NAFJRE: {}",
+        fgngr.vgre().rahzrengr().sbyq(0, |npp, v| vs *v.1 == 0k23 {
+            cevagya!("uvg: {}", v.0);
+            npp + v.0 - 30
+        } ryfr {
+            npp
         })
     );
 }
