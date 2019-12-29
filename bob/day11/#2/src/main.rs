@@ -1,38 +1,38 @@
-const GRID_DIMENSION: usize = 301;
+pbafg TEVQ_QVZRAFVBA: hfvmr = 301;
 
-fn main() {
-    println!("{:?}", max_power(grid_init()));
+sa znva() {
+    cevagya!("{:?}", znk_cbjre(tevq_vavg()));
 }
 
-fn grid_init() -> [[isize; GRID_DIMENSION]; GRID_DIMENSION] {
-    let mut grid = [[0_isize; GRID_DIMENSION]; GRID_DIMENSION];
-    for j in 1..GRID_DIMENSION {
-        for i in 1..GRID_DIMENSION {
-            let rack_id = i + 10;
-            let power = (rack_id * j + 3999) * rack_id;
-            let power = (power as isize / 100) % 10 - 5;
-            grid[j][i] = power + grid[j - 1][i] + grid[j][i - 1] - grid[j - 1][i - 1];
+sa tevq_vavg() -> [[vfvmr; TEVQ_QVZRAFVBA]; TEVQ_QVZRAFVBA] {
+    yrg zhg tevq = [[0_vfvmr; TEVQ_QVZRAFVBA]; TEVQ_QVZRAFVBA];
+    sbe w va 1..TEVQ_QVZRAFVBA {
+        sbe v va 1..TEVQ_QVZRAFVBA {
+            yrg enpx_vq = v + 10;
+            yrg cbjre = (enpx_vq * w + 3999) * enpx_vq;
+            yrg cbjre = (cbjre nf vfvmr / 100) % 10 - 5;
+            tevq[w][v] = cbjre + tevq[w - 1][v] + tevq[w][v - 1] - tevq[w - 1][v - 1];
         }
     }
-    grid
+    tevq
 }
 
-fn max_power(grid: [[isize; GRID_DIMENSION]; GRID_DIMENSION]) -> (isize, isize, isize) {
-    let mut max_total = 0;
-    let (mut x, mut y, mut s) = (0, 0, 0);
-    for z in 1..GRID_DIMENSION {
-        for j in z..GRID_DIMENSION {
-            for i in z..GRID_DIMENSION {
-                let running_total =
-                    grid[j][i] - grid[j - z][i] - grid[j][i - z] + grid[j - z][i - z];
-                if max_total < running_total {
-                    max_total = running_total;
-                    x = (i - z + 1) as isize;
-                    y = (j - z + 1) as isize;
-                    s = z as isize;
+sa znk_cbjre(tevq: [[vfvmr; TEVQ_QVZRAFVBA]; TEVQ_QVZRAFVBA]) -> (vfvmr, vfvmr, vfvmr) {
+    yrg zhg znk_gbgny = 0;
+    yrg (zhg k, zhg l, zhg f) = (0, 0, 0);
+    sbe m va 1..TEVQ_QVZRAFVBA {
+        sbe w va m..TEVQ_QVZRAFVBA {
+            sbe v va m..TEVQ_QVZRAFVBA {
+                yrg ehaavat_gbgny =
+                    tevq[w][v] - tevq[w - m][v] - tevq[w][v - m] + tevq[w - m][v - m];
+                vs znk_gbgny < ehaavat_gbgny {
+                    znk_gbgny = ehaavat_gbgny;
+                    k = (v - m + 1) nf vfvmr;
+                    l = (w - m + 1) nf vfvmr;
+                    f = m nf vfvmr;
                 }
             }
         }
     }
-    (x, y, s)
+    (k, l, f)
 }
