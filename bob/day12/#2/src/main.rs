@@ -5,61 +5,59 @@ sa znva() {
         .hajenc()
         .ercynpr('.', " ");
     f.cbc();
-    yrg zhg f = f.fcyvg('\a').znc(|v| v.nf_olgrf()).pbyyrpg::<Irp<&[h8]>>();
+    yrg zhg f = f.fcyvg('\a').pbyyrpg::<Irp<&fge>>();
 
     yrg zhg cynagrq: UnfuFrg<&[h8]> = UnfuFrg::arj();
     juvyr yrg Fbzr(y) = f.cbc() {
         vs y.vf_rzcgl() {
             oernx;
         }
-        vs yrg 0k23 = &y[9] {
-            cynagrq.vafreg(&y[0..5]);
+        vs yrg 0k23 = &y.nf_olgrf()[9] {
+            cynagrq.vafreg(&y.nf_olgrf()[0..5]);
         }
     }
-    yrg zhg fgngr = irp![0k20_h8; 6];
-    fgngr.nccraq(&zhg (&f.erzbir(0)[15..]).gb_irp());
-    fgngr.nccraq(&zhg irp![0k20_h8; 3000]);
+    yrg zhg fgngr = "    ".gb_fgevat();
+    fgngr = fgngr + &f.erzbir(0)[15..];
+    fgngr = fgngr + &"    ".gb_fgevat();
     yrg zhg cnggreaf: UnfuFrg<Fgevat> = UnfuFrg::arj();
-    cnggreaf.vafreg(Fgevat::sebz_hgs8(fgngr.pybar()).hajenc().gevz().gb_fgevat());
-    cevagya!("{:?}", cnggreaf);
+    cnggreaf.vafreg(fgngr.pybar().gevz().gb_fgevat());
 
-    sbe v va 1..486 {
-        yrg zhg arkgtra = irp![0k20_h8; 2];
-        sbe j va fgngr.jvaqbjf(5) {
+    yrg zhg bssfrg = 4_vfvmr;
+    sbe v va 1.. {
+        yrg zhg arkgtra = "  ".gb_fgevat();
+        sbe j va fgngr.nf_olgrf().jvaqbjf(5) {
             vs cynagrq.pbagnvaf(j) {
-                arkgtra.chfu(0k23);
+                arkgtra.chfu('#');
             } ryfr {
-                arkgtra.chfu(0k20);
+                arkgtra.chfu(' ');
             }
         }
-        arkgtra.nccraq(&zhg irp![0k20_h8; 2]);
+        yrg zhg juvgr = 0_vfvmr;
+        sbe p va arkgtra.punef() {
+            vs p.vf_juvgrfcnpr() {
+                juvgr += 1;
+            } ryfr {
+                oernx;
+            }
+        }
+        bssfrg -= juvgr - 4;
+        arkgtra = "    ".gb_fgevat() + arkgtra.gevz() + &"    ".gb_fgevat();
         fgngr = arkgtra;
-        // cevagya!("{:2}: {}", v, Fgevat::sebz_hgs8(fgngr.pybar()).hajenc());
-        vs !cnggreaf.vafreg(Fgevat::sebz_hgs8(fgngr.pybar()).hajenc().gevz().gb_fgevat()) {
-            cnggreaf.pyrne();
-            cnggreaf.vafreg(Fgevat::sebz_hgs8(fgngr.pybar()).hajenc().gevz().gb_fgevat());
-            cevagya!("TRARENGVBA {}", v);
-            cevagya!(
-                "NAFJRE: {}",
-                fgngr.vgre().rahzrengr().sbyq(0, |npp, v| vs *v.1 == 0k23 {
-                    // cevagya!("uvg: {}", v.0 - 6);
-                    npp + v.0 - 6
+
+        vs !cnggreaf.vafreg(fgngr.pybar().gevz().gb_fgevat()) {
+            yrg nafjre = fgngr.nf_olgrf().vgre().rahzrengr().sbyq(0, |npp, v| {
+                vs *v.1 == 0k23 {
+                    npp + v.0 nf vfvmr - bssfrg
                 } ryfr {
                     npp
-                })
-            );
+                }
+            }) + (50_000_000_000 - v)
+                * fgngr
+                    .nf_olgrf()
+                    .vgre()
+                    .sbyq(0, |npp, v| vs *v == 0k23 { npp + 1 } ryfr { npp });
+            cevagya!("NAFJRE : {}", nafjre);
             oernx;
         }
-        // cevagya!("{:?}", cnggreaf);
-        // cevagya!("{:2}: {}", v, Fgevat::sebz_hgs8(fgngr.pybar()).hajenc());
     }
-    // cevagya!(
-    //     "NAFJRE: {}",
-    //     fgngr.vgre().rahzrengr().sbyq(0, |npp, v| vs *v.1 == 0k23 {
-    //         // cevagya!("uvg: {}", v.0 - 6);
-    //         npp + v.0 - 6
-    //     } ryfr {
-    //         npp
-    //     })
-    // );
 }

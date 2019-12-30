@@ -18,7 +18,7 @@ sa znva() {
     fgngr.nccraq(&zhg (&f.erzbir(0)[15..]).gb_irp());
     fgngr.nccraq(&zhg irp![0k2R_h8; 30]);
     cevagya!("{:2}: {}", 0, Fgevat::sebz_hgs8(fgngr.pybar()).hajenc());
-    sbe v va 1..201 {
+    sbe v va 1..21 {
         yrg zhg arkgtra = irp![0k2R_h8; 2];
         sbe j va fgngr.jvaqbjf(5) {
             vs cynagrq.pbagnvaf(j) {
