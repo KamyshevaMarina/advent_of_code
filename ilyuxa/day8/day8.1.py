@@ -18,7 +18,7 @@ def tree_creater(d, answer):
     if child != 0:
         for i in range(child):
             answer = tree_creater(d, answer)
-         ##   print(answer)
+            ##print(answer)
     elif child == 0:
         for i in range(metdata):
             answer += int(d.pop(0))
@@ -27,8 +27,8 @@ def tree_creater(d, answer):
     if metdata != 0 and pr == 0:
         for i in range(metdata):
             answer += int(d.pop())
-
     return answer
+
 
 
 if __name__ == "__main__":
