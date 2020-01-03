@@ -14,13 +14,13 @@ def find_items():
 
 
 def tree_creater(d, answer):
-    print(d)
+    #print(d)
     child = d.pop(0)
     metdata = d.pop(0)
     pr = 0
     if child != 0:
         for i in range(child):
-            answer, d = tree_creater(d, answer)
+            answer = tree_creater(d, answer)
     elif metdata != 0:
         for i in range(metdata):
             answer += d.pop(0)
@@ -33,7 +33,7 @@ def tree_creater(d, answer):
         for i in range(metdata):
             answer += d.pop(0)
 
-    return answer, d
+    return answer
 
 
 if __name__ == "__main__":
