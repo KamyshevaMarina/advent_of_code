@@ -7,28 +7,33 @@ def find_items():
     with open("tadam.txt") as file_handler:
         for line in file_handler:
             d += line.replace('.', '').split()
+    d = [int(i) for i in d]
+    ##  print(d)
+    ## print(len(d))
     return d
 
 
 def tree_creater(d, answer):
-
-    child = int(d.pop(0))
-    metdata = int(d.pop(0))
+    print(d)
+    child = d.pop(0)
+    metdata = d.pop(0)
     pr = 0
     if child != 0:
         for i in range(child):
-            answer = tree_creater(d, answer)
-            ##print(answer)
-    elif child == 0:
+            answer, d = tree_creater(d, answer)
+    elif metdata != 0:
         for i in range(metdata):
-            answer += int(d.pop(0))
+            answer += d.pop(0)
             pr = 1
-        return answer
-    if metdata != 0 and pr == 0:
+    else:
         for i in range(metdata):
-            answer += int(d.pop())
-    return answer
+            answer += d.pop(0)
+        pr = 1
+    if pr != 1:
+        for i in range(metdata):
+            answer += d.pop(0)
 
+    return answer, d
 
 
 if __name__ == "__main__":
