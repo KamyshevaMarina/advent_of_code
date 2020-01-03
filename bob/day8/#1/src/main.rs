@@ -1,24 +1,25 @@
-sa znva() {
-    yrg zhg yvfg = fgq::sf::ernq_gb_fgevat("qngn.gkg").hajenc();
-    yvfg.cbc();
-    yrg zhg yvfg = yvfg
-        .fcyvg(' ')
-        .svygre_znc(|v| v.cnefr::<h32>().bx())
-        .pbyyrpg::<Irp<h32>>();
-    yvfg.erirefr();
-    yrg v = zrgn_trg(&zhg yvfg);
-    cevagya!("ERFHYG: {}", v);
+fn main() {
+    let mut list = std::fs::read_to_string("data.txt").unwrap();
+    // list.pop();
+    let mut list = list
+        .split(' ')
+        .rev()
+        .filter_map(|i| i.parse::<u32>().ok())
+        .collect::<Vec<u32>>();
+    println!("{:?}", list);
+    let i = meta_get(&mut list);
+    println!("RESULT: {}", i);
 }
 
-sa zrgn_trg(yvfg: &zhg Irp<h32>) -> h32 {
-    yrg pbhag = yvfg.cbc().hajenc();
-    yrg zrgn_pbhag = yvfg.cbc().hajenc();
-    yrg zhg zrgn_fhz = 0;
-    sbe _ va 0..pbhag {
-        zrgn_fhz += zrgn_trg(yvfg);
+fn meta_get(list: &mut Vec<u32>) -> u32 {
+    let count = list.pop().unwrap();
+    let meta_count = list.pop().unwrap();
+    let mut meta_sum = 0;
+    for _ in 0..count {
+        meta_sum += meta_get(list);
     }
-    sbe _ va 0..zrgn_pbhag {
-        zrgn_fhz += yvfg.cbc().hajenc();
+    for _ in 0..meta_count {
+        meta_sum += list.pop().unwrap();
     }
-    zrgn_fhz
+    meta_sum
 }
